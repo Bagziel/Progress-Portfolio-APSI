@@ -1,10 +1,4 @@
-# Your Project Name
-
-> **Replace this whole file.** It is a worked example of the README your project
-> will be graded from, not a file to leave as it is. Start with
-> [START-HERE.md](START-HERE.md).
-
-One sentence saying what this does and who it is for.
+# Progress Portfolio
 
 **Live site:** https://yourusername.github.io/your-repo-name/
 **API:** https://your-api.onrender.com/healthz
@@ -18,9 +12,10 @@ One sentence saying what this does and who it is for.
 
 ## What it does
 
-- Report a sighting with a place, a description and a spookiness rating
-- Browse everything reported, newest first
-- Delete a report
+A personal site that's both a portfolio and a progress log.
+- Provide an overview of the skills, knowledge, experience, and projects that I have acquired in the past.
+- Track the skills and goals I'm currently working towards, showing the growth in progress.
+- Display a task list in the progress log to acquire more experience and knowledge.
 
 ## Built with
 
@@ -94,21 +89,6 @@ Check the API on its own before you blame the client:
 
 ## Environment variables
 
-None of these are committed. `.env.example` in each folder lists them with
-placeholder values.
-
-| Name | Where | What it is |
-| --- | --- | --- |
-| `DATABASE_URL` | server | PostgreSQL connection string. Contains a password |
-| `CORS_ORIGINS` | server | comma-separated origins allowed to call the API |
-| `NODE_ENV` | server | `production` on your host |
-| `PORT` | server | **set by the host**, do not set it yourself |
-| `VITE_USE_MOCK_API` | client, at build time | only `false` turns demo mode off; unset means on |
-| `VITE_API_BASE_URL` | client, at build time | your API's public URL, no trailing slash |
-
-Every `VITE_` value is compiled into the built JavaScript and is **public**.
-Never put a key, a password or a connection string in one.
-
 ## Deploying
 
 **Client, to GitHub Pages.** Already wired up in
@@ -130,13 +110,6 @@ once against the hosted database.
 
 ## Project structure
 
-    client/          React front end, built by Vite
-      src/api/       ONE interface, two implementations, chosen by a variable
-      src/components/
-    server/          Express API
-      db/            pool, schema.sql, seed.sql, and a runner for them
-    compose.yml      only if you self-host
-    docs/            your planning documents and weekly reports
 
 ## Architecture
 
@@ -149,7 +122,8 @@ Three honest bullets. This paragraph is worth more than it looks.
 
 ## Author
 
-Your name, and a link. Course and section.
+Baguio, Eriel Ben L. | CS-403
+https://github.com/Bagziel
 
 ## AI use
 
