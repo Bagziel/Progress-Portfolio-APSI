@@ -10,7 +10,7 @@
 
 import seed from './seed.json'
 
-const GOALS_KEY = 'progress--portfolio-tasks'
+const TASKS_KEY = 'progress--portfolio-tasks'
 const PROJECTS_KEY = 'progress--portfolio-projects'
 
 // A real network is not instant. Keeping this delay is what forces you to build
@@ -21,16 +21,15 @@ const delay = (ms = 250) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function read(key, defaultValue) {
   const stored = localStorage.getItem(key)
-  if (!stored) {
+  if (stored) {
     try {
-      localStorage.setItem(key, JSON.stringify(defaultValue))
-    } 
-    catch {
+      return JSON.parse(stored)
+    } catch {
       localStorage.removeItem(key)
     }
   }
-  localStorage.setItem(key, JSON.stringify(defaultValue))
-  return defaultValue
+  localStorage.setItem(key, JSON.stringify(defaultValue || []))
+  return defaultValue || []
 }
 
 function write(key, rows) {
@@ -45,9 +44,9 @@ export async function listTasks() {
   return read(TASKS_KEY, seed.tasks)
 }
 
-export async function createTask(title) {
+export async function createTask(input) {
   await delay()
-  const title = typeof title === 'string' ? input : input.title
+  const title = typeof input === 'string' ? input : input.title
   const category = (typeof input === 'object' && input.category) || 'Other'
   const created = {
     id: `task-${crypto.randomUUID()}`,
@@ -67,7 +66,7 @@ export async function updateTask(id, updates) {
   const current = read(TASKS_KEY, seed.tasks || [])
   const index = current.findIndex((t) => String(t.id) === String(id))
   if (index === -1) throw new Error('Task not found')
-  const updated = [...current[index], ...updates]
+  const updated = {...current[index], ...updates}
   current[index] = updated
   write(TASKS_KEY, current)
   return updated
