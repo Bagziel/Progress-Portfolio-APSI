@@ -1,6 +1,6 @@
 # Progress Portfolio
 
-**Live site:** https://yourusername.github.io/your-repo-name/
+**Live site:** https://bagziel.github.io/Progress-Portfolio-APSI/
 **API:** https://your-api.onrender.com/healthz
 **Demo video:** (link)
 

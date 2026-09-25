@@ -3,38 +3,60 @@
 // This is the file that matters for your finals project. mockApi.js exists so
 // you can build the interface before this has anywhere to point.
 
-const BASE = import.meta.env.VITE_API_BASE_URL || ''
+const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
+const TASKS_BASE = `${API_BASE}/tasks`
+const PROJECTS_BASE = `${API_BASE}/projects`
 
-async function request(path, options) {
-  const response = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options,
-  })
-
+async function handleResponse(response) {
+  if (response.status === 404) throw new Error('Not found')
   if (!response.ok) {
-    // Try to use the API's own message; fall back to the status line.
-    let message = `${response.status} ${response.statusText}`
-    try {
-      const body = await response.json()
-      if (body?.error) message = body.error
-    } catch {
-      // The body was not JSON. The status line is all we have.
-    }
-    throw new Error(message)
+    const body = await response.json().catch(() => ({}))
+    throw new Error(body.error || `Request failed with status ${response.status}`)
   }
-
-  return response.status === 204 ? null : response.json()
+  if (response.status === 204) return undefined
+  return response.json()
 }
 
-export const listSightings = () => request('/api/sightings')
+// Tasks
 
-export const getSighting = (id) => request(`/api/sightings/${id}`)
+export async function listTasks() {
+  const response = await fetch(TASKS_BASE)
+  return handleResponse(response)
+}
 
-export const createSighting = (input) =>
-  request('/api/sightings', { method: 'POST', body: JSON.stringify(input) })
+export async function createTask(title) {
+  const response = await fetch(`${TASKS_BASE}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title })
+  })
+  return handleResponse(response)
+  }
 
-export const updateSighting = (id, input) =>
-  request(`/api/sightings/${id}`, { method: 'PUT', body: JSON.stringify(input) })
+export async function updateTask(id, updates) {
+  const response = await fetch(`${TASKS_BASE}/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates)
+  })
+  return handleResponse(response)
+}
 
-export const deleteSighting = (id) =>
-  request(`/api/sightings/${id}`, { method: 'DELETE' })
+export async function deleteTask(id) {
+  const response = await fetch(`${TASKS_BASE}/${id}`, {
+    method: 'DELETE'
+  })
+  return handleResponse(response)
+}
+
+// Projects
+
+export async function listProjects() {
+  const response = await fetch(PROJECTS_BASE)
+  return handleResponse(response)
+}
+
+export async function getProject(id) {
+  const response = await fetch(`${PROJECTS_BASE}/${id}`)
+  return handleResponse(response)
+}

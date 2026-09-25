@@ -10,66 +10,87 @@
 
 import seed from './seed.json'
 
-const KEY = 'final-project:sightings'
+const GOALS_KEY = 'progress--portfolio-tasks'
+const PROJECTS_KEY = 'progress--portfolio-projects'
 
 // A real network is not instant. Keeping this delay is what forces you to build
 // a loading state now, while it is cheap, instead of discovering you need one
 // the day you switch to the real API.
+
 const delay = (ms = 250) => new Promise((resolve) => setTimeout(resolve, ms))
 
-function read() {
-  const stored = localStorage.getItem(KEY)
-  if (stored) {
+function read(key, defaultValue) {
+  const stored = localStorage.getItem(key)
+  if (!stored) {
     try {
-      return JSON.parse(stored)
-    } catch {
-      // Corrupted storage. Start again rather than crashing the app.
-      localStorage.removeItem(KEY)
+      localStorage.setItem(key, JSON.stringify(defaultValue))
+    } 
+    catch {
+      localStorage.removeItem(key)
     }
   }
-  localStorage.setItem(KEY, JSON.stringify(seed))
-  return seed
+  localStorage.setItem(key, JSON.stringify(defaultValue))
+  return defaultValue
 }
 
-function write(rows) {
-  localStorage.setItem(KEY, JSON.stringify(rows))
+function write(key, rows) {
+  localStorage.setItem(key, JSON.stringify(rows))
   return rows
 }
 
-export async function listSightings() {
+// Tasks
+
+export async function listTasks() {
   await delay()
-  return read().slice().sort((a, b) => b.reported_at.localeCompare(a.reported_at))
+  return read(TASKS_KEY, seed.tasks)
 }
 
-export async function getSighting(id) {
+export async function createTask(title) {
   await delay()
-  const found = read().find((row) => String(row.id) === String(id))
-  if (!found) throw new Error('Not found')
-  return found
-}
-
-export async function createSighting(input) {
-  await delay()
+  const title = typeof title === 'string' ? input : input.title
+  const category = (typeof input === 'object' && input.category) || 'Other'
   const created = {
-    ...input,
-    id: crypto.randomUUID(),
-    reported_at: new Date().toISOString(),
+    id: `task-${crypto.randomUUID()}`,
+    title,
+    category,
+    completed: false,
+    createdAt: new Date().toISOString(),
   }
-  write([...read(), created])
+  const current = read(TASKS_KEY, seed.tasks || [])
+  const updated = [created, ...current]
+  write(TASKS_KEY, updated)
   return created
 }
 
-export async function updateSighting(id, input) {
+export async function updateTask(id, updates) {
   await delay()
-  const rows = read()
-  const index = rows.findIndex((row) => String(row.id) === String(id))
-  if (index === -1) throw new Error('Not found')
-  rows[index] = { ...rows[index], ...input }
-  write(rows)
-  return rows[index]
+  const current = read(TASKS_KEY, seed.tasks || [])
+  const index = current.findIndex((t) => String(t.id) === String(id))
+  if (index === -1) throw new Error('Task not found')
+  const updated = [...current[index], ...updates]
+  current[index] = updated
+  write(TASKS_KEY, current)
+  return updated
 }
 
-export async function deleteSighting(id) {
+export async function deleteTask(id) {
   await delay()
-  write(read().filter((row) => String(row.id) !== String(id)))
+  const current = read(TASKS_KEY, seed.tasks || [])
+  const filtered = current.filter((t) => String(t.id) !== String(id))
+  write(TASKS_KEY, filtered)
+  return { ok: true }
+}
+
+// Projects
+
+export async function listProjects() {
+  await delay()
+  return read(PROJECTS_KEY, seed.projects)
+}
+
+export async function getProject(id) {
+  await delay()
+  const found = read(PROJECTS_KEY, seed.projects || []).find((p) => String(p.id) === String(id))
+  if (!found) throw new Error('Project not found')
+  return found
 }
