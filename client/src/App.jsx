@@ -16,17 +16,17 @@ import DemoNotice from './components/DemoNotice.jsx'
 
 
 export default function App() {
-  const [goals, setGoals] = useState([])
+  const [tasks, setTasks] = useState([])
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([listGoals(), listProjects()])
-      .then(([goalsData, projectsData]) => {
+    Promise.all([listTasks(), listProjects()])
+      .then(([tasksData, projectsData]) => {
         if (cancelled) return;
-        setGoals(goalsData);
+        setTasks(tasksData);
         setProjects(projectsData);
       })
       .catch((err) => {
@@ -42,23 +42,23 @@ export default function App() {
     };
   }, []);
 
-  async function handleAddGoal(title) {
-    const createdGoal = await createGoal(title);
-    setGoals((prevGoals) => [...prevGoals, createdGoal]);
+  async function handleAddTask(title) {
+    const createdTask = await createTask(title);
+    setTasks((prevTasks) => [...prevTasks, createdTask]);
   }
 
-  async function handleToggleGoal(id) {
-    const current = goals.find((goal) => goal.id === id);
+  async function handleToggleTask(id) {
+    const current = tasks.find((task) => task.id === id);
     if (!current) return;
-    const updatedGoal = await updateGoal(id, { completed: !current.completed });
-    setGoals((prevGoals) =>
-      prevGoals.map((goal) => (goal.id === id ? updatedGoal : goal))
+    const updatedTask = await updateTask(id, { completed: !current.completed });
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === id ? updatedTask : task))
     );
   }
 
-  async function handleDeleteGoal(id) {
-    await deleteGoal(id);
-    setGoals((prevGoals) => prevGoals.filter((goal) => goal.id !== id));
+  async function handleDeleteTask(id) {
+    await deleteTask(id);
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   }
 
   return(
@@ -79,17 +79,17 @@ export default function App() {
               element={
                 <HomePage
                   projects={projects}
-                  goals={goals}
-                  onAddGoal={handleAddGoal}
-                  onToggleGoal={handleToggleGoal}
-                  onDeleteGoal={handleDeleteGoal}
+                  tasks={tasks}
+                  onAddTask={handleAddTask}
+                  onToggleTask={handleToggleTask}
+                  onDeleteTask={handleDeleteTask}
                 />
               }
             />
             <Route path="/projects" element={<ProjectsPage projects={projects} />} />
             <Route
               path="/progress"
-              element={<ProgressPage goals={goals} onToggleGoal={handleToggleGoal} onDeleteGoal={handleDeleteGoal} />}
+              element={<ProgressPage tasks={tasks} onToggleTask={handleToggleTask} onDeleteTask={handleDeleteTask} />}
             />
           </Routes>
         )}
