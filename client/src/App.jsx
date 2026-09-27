@@ -5,7 +5,7 @@ import Footer from "./components/organisms/Footer";
 import HomePage from "./pages/HomePage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ProgressPage from "./pages/ProgressPage";
-import { listGoals, listProjects, createGoal, updateGoal, deleteGoal } from "./api";
+import { listTasks, listProjects, createTask, updateTask, deleteTask } from "./api";
 import DemoNotice from './components/DemoNotice.jsx'
 
 // A deliberately small working app. Replace all of it with your own project.
@@ -18,24 +18,40 @@ import DemoNotice from './components/DemoNotice.jsx'
 export default function App() {
   const [tasks, setTasks] = useState([])
   const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [currentPage, setCurrentPage] = useState('home')
+
+  // Handle URL has changes (#home, #projects, #progress)
+  useEffect(() => {
+    function handleHash() {
+      const hash = window.location.has.replace('#/', '').replace('#', '');
+      if (['projects', 'progress'].includes(hash)) {
+        setCurrentPage(hash);
+      } else {
+        setCurrentPage('home');
+      }
+    }
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
     Promise.all([listTasks(), listProjects()])
       .then(([tasksData, projectsData]) => {
         if (cancelled) return;
-        setTasks(tasksData);
-        setProjects(projectsData);
+        setTasks(tasksData || []);
+        setProjects(projectsData || []);
       })
       .catch((err) => {
         if (cancelled) return;
-        setLoadError(err.message);
+        setError(err.message);
       })
       .finally(() => {
         if (cancelled) return;
-        setIsLoading(false);
+        setLoading(false);
       });
     return () => {
       cancelled = true;
@@ -62,39 +78,45 @@ export default function App() {
   }
 
   return(
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1">
-        {loadError && (
-          <p className="max-w-5xl mx-auto px-4 py-4 text-small text-red-600">
-            Couldn&apos;t load data: {loadError}
-          </p>
+    <div className="app-layout">
+      <Header currentPage={currentPage} onNavigate={handleNavigate} />
+      <main className="main-content">
+        <div className="page-wrapper">
+          <DemoNotice />
+          {loadError && (
+            <div className="error" role="alert">
+              Couldn&apos;t load data: {loadError}
+            </div>
+          )}
+          {isLoading ? (
+            <p className="loading-state">Loading portfolio data...</p>
+          ) : (
+            <>
+            {currentPage === 'home' && (
+              <HomePage
+                projects={projects}
+                tasks={tasks}
+                onAddTask={handleAddTask}
+                onToggleTask={handleToggleTask}
+                onDeleteTask={handleDeleteTask}
+              />
+            )}
+            {currentPage === 'projects' && (
+              <ProjectsPage projects={projects} />
+            )}
+            {currentPage === 'progress' && (
+              <ProgressPage
+                tasks={tasks}
+                onAddTask={handleAddTask}
+                onToggleTask={handleToggleTask}
+                onDeleteTask={handleDeleteTask}
+              />
+            )}
+          </>
         )}
-        {isLoading ? (
-          <p className="max-w-5xl mx-auto px-4 py-10 text-body text-text-secondary">Loading...</p>
-        ) : (
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <HomePage
-                  projects={projects}
-                  tasks={tasks}
-                  onAddTask={handleAddTask}
-                  onToggleTask={handleToggleTask}
-                  onDeleteTask={handleDeleteTask}
-                />
-              }
-            />
-            <Route path="/projects" element={<ProjectsPage projects={projects} />} />
-            <Route
-              path="/progress"
-              element={<ProgressPage tasks={tasks} onToggleTask={handleToggleTask} onDeleteTask={handleDeleteTask} />}
-            />
-          </Routes>
-        )}
-      </main>
-      <Footer />
+      </div>
+    </main>
+    <Footer />
     </div>
   );
 }
