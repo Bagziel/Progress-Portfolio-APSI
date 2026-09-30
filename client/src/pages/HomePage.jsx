@@ -28,7 +28,7 @@ export default function HomePage({
       <section className="hero-section">
         <h1>Baguio, Eriel Ben L.</h1>
         <p className="hero-subtitle">
-          Aspiring <strong>Data Analyst</strong> & Computer Science Student.
+          Aspiring Computer Science Student.
         </p>
         <p className="hero-description">
           Tracking real-time learning progress, technical competencies, and completed data analytics projects.

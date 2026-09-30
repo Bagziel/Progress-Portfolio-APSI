@@ -2,38 +2,48 @@
   "tasks": [
     {
       "id": 1,
-      "title": "Learn React",
-      "description": "Learn the basics of React and build a simple application.",
+      "title": "[Work in Progress] Complete Data Cleaning & EDA Course",
+      "description": "[Template Text] Documenting core techniques in data preprocessing and exploratory analysis.",
       "category": "SQL & Databases",
       "completed": false,
-      "createdAt": "N/A"
+      "createdAt": "2026-09-01T10:00:00.000Z"
     },
     {
       "id": 2,
-      "title": "Build a Portfolio",
-      "description": "Create a personal portfolio website to showcase my projects.",
-      "category": "Web Development",
+      "title": "[Work in Progress] Build Interactive BI Dashboard",
+      "description": "[Template Text] Design executive reporting dashboards with filterable KPI widgets.",
+      "category": "Data Visualization",
       "completed": false,
-      "createdAt": "N/A"
+      "createdAt": "2026-09-10T14:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "title": "[Template Text] Master SQL Window Functions and CTEs",
+      "description": "[Template Text] Practice complex query aggregations, partitioning, and indexing.",
+      "category": "SQL & Databases",
+      "completed": true,
+      "createdAt": "2026-09-15T09:00:00.000Z"
     }
   ],
   "projects": [
     {
       "id": 1,
-      "name": "Personal Portfolio",
-      "description": "A personal portfolio website to showcase my projects and skills.",
-      "tools": ["React", "CSS", "Vite", "JavaScript"],
-      "repository": "https://github.com/yourusername/personal-portfolio",
-      "liveDemo": "https://yourusername.github.io/personal-portfolio",
+      "name": "[Work in Progress] Portfolio & Analytics Tracker",
+      "description": "[Template Text] A web platform showcasing projects and tracking ongoing technical milestones.",
+      "tools": ["React", "CSS", "Vite", "JavaScript", "PostgreSQL"],
+      "repository": "https://github.com/Bagziel/Progress-Portfolio-APSI",
+      "liveDemo": "https://Bagziel.github.io/Progress-Portfolio-APSI",
+      "featured": true,
       "completed": false
     },
     {
       "id": 2,
-      "name": "N/A",
-      "description": "N/A",
-      "tools": [],
-      "repository": "N/A",
-      "liveDemo": "N/A",
+      "name": "[Template Text] Exploratory Customer Analysis Model",
+      "description": "[Template Text] Detailed case study on consumer retention and cohort segmentation.",
+      "tools": ["Python", "Pandas", "PostgreSQL"],
+      "repository": "https://github.com/Bagziel/Progress-Portfolio-APSI",
+      "liveDemo": "https://github.com/Bagziel",
+      "featured": true,
       "completed": false
     }
   ]
