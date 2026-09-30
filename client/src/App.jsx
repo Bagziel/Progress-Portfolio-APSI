@@ -1,42 +1,41 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import Header from "./components/organisms/Header";
-import Footer from "./components/organisms/Footer";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ProgressPage from "./pages/ProgressPage";
 import { listTasks, listProjects, createTask, updateTask, deleteTask } from "./api";
-import DemoNotice from './components/DemoNotice.jsx'
-
-// A deliberately small working app. Replace all of it with your own project.
-//
-// What is worth keeping is the SHAPE: four states rather than two, a loading
-// message that admits a free-tier server can be slow to wake, and errors that
-// say something rather than rendering an empty list.
-
+import DemoNotice from "./components/DemoNotice.jsx";
 
 export default function App() {
-  const [tasks, setTasks] = useState([])
-  const [projects, setProjects] = useState([])
-  const [isLoading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [currentPage, setCurrentPage] = useState('home')
+  // Application State
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
+  const [currentPage, setCurrentPage] = useState("home");
 
-  // Handle URL has changes (#home, #projects, #progress)
+  // Zero-dependency Hash Navigation (#home, #projects, #progress)
   useEffect(() => {
     function handleHash() {
-      const hash = window.location.has.replace('#/', '').replace('#', '');
-      if (['projects', 'progress'].includes(hash)) {
+      const hash = window.location.hash.replace("#/", "").replace("#", "");
+      if (["projects", "progress"].includes(hash)) {
         setCurrentPage(hash);
       } else {
-        setCurrentPage('home');
+        setCurrentPage("home");
       }
     }
     handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
   }, []);
 
+  function handleNavigate(page) {
+    setCurrentPage(page);
+    window.location.hash = `#${page}`;
+  }
+
+  // Fetch initial tasks and projects
   useEffect(() => {
     let cancelled = false;
     Promise.all([listTasks(), listProjects()])
@@ -47,37 +46,38 @@ export default function App() {
       })
       .catch((err) => {
         if (cancelled) return;
-        setError(err.message);
+        setLoadError(err.message);
       })
       .finally(() => {
         if (cancelled) return;
-        setLoading(false);
+        setIsLoading(false);
       });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  async function handleAddTask(title) {
-    const createdTask = await createTask(title);
-    setTasks((prevTasks) => [...prevTasks, createdTask]);
+  // Task Actions
+  async function handleAddTask(input) {
+    const created = await createTask(input);
+    setTasks((prevTasks) => [created, ...prevTasks]);
   }
 
   async function handleToggleTask(id) {
-    const current = tasks.find((task) => task.id === id);
+    const current = tasks.find((t) => t.id === id);
     if (!current) return;
-    const updatedTask = await updateTask(id, { completed: !current.completed });
+    const updated = await updateTask(id, { completed: !current.completed });
     setTasks((prevTasks) =>
-      prevTasks.map((task) => (task.id === id ? updatedTask : task))
+      prevTasks.map((t) => (t.id === id ? updated : t))
     );
   }
 
   async function handleDeleteTask(id) {
     await deleteTask(id);
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
   }
 
-  return(
+  return (
     <div className="app-layout">
       <Header currentPage={currentPage} onNavigate={handleNavigate} />
       <main className="main-content">
@@ -92,31 +92,32 @@ export default function App() {
             <p className="loading-state">Loading portfolio data...</p>
           ) : (
             <>
-            {currentPage === 'home' && (
-              <HomePage
-                projects={projects}
-                tasks={tasks}
-                onAddTask={handleAddTask}
-                onToggleTask={handleToggleTask}
-                onDeleteTask={handleDeleteTask}
-              />
-            )}
-            {currentPage === 'projects' && (
-              <ProjectsPage projects={projects} />
-            )}
-            {currentPage === 'progress' && (
-              <ProgressPage
-                tasks={tasks}
-                onAddTask={handleAddTask}
-                onToggleTask={handleToggleTask}
-                onDeleteTask={handleDeleteTask}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </main>
-    <Footer />
+              {currentPage === "home" && (
+                <HomePage
+                  projects={projects}
+                  tasks={tasks}
+                  onAddTask={handleAddTask}
+                  onToggleTask={handleToggleTask}
+                  onDeleteTask={handleDeleteTask}
+                  onNavigate={handleNavigate}
+                />
+              )}
+              {currentPage === "projects" && (
+                <ProjectsPage projects={projects} />
+              )}
+              {currentPage === "progress" && (
+                <ProgressPage
+                  tasks={tasks}
+                  onAddTask={handleAddTask}
+                  onToggleTask={handleToggleTask}
+                  onDeleteTask={handleDeleteTask}
+                />
+              )}
+            </>
+          )}
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }
