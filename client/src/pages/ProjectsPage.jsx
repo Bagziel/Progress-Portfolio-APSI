@@ -2,7 +2,7 @@ export default function ProjectsPage({ projects = [] }) {
   return (
     <div className="page-content">
       <div className="page-header">
-        <h1>Projects & Case Studies</h1>
+        <h1>Projects &amp; Case Studies</h1>
         <p className="lede">
           Work demonstrating exploratory data analysis, database design, ETL pipelines, and interactive reporting.
         </p>
@@ -18,15 +18,26 @@ export default function ProjectsPage({ projects = [] }) {
             const repo = project.repository || project.repoUrl;
             const live = project.liveDemo || project.liveUrl;
             const tools = Array.isArray(project.tools) ? project.tools : [];
+            const isFeatured = project.featured;
+            const isCompleted = project.completed;
 
             return (
-              <article key={project.id} className="card project-card">
+              <article
+                key={project.id}
+                className={`card project-card${isFeatured ? ' featured' : ''}`}
+              >
                 <div className="project-header">
                   <h2>{project.name || project.title}</h2>
-                  {(project.featured || project.completed) && (
-                    <span className="featured-badge">Featured</span>
-                  )}
+                  <div className="project-badges">
+                    {isFeatured && (
+                      <span className="featured-badge">Featured</span>
+                    )}
+                    <span className={`status-badge ${isCompleted ? 'completed' : 'in-progress'}`}>
+                      {isCompleted ? 'Completed' : 'In Progress'}
+                    </span>
+                  </div>
                 </div>
+
                 <p className="project-desc">{project.description}</p>
 
                 {tools.length > 0 && (
@@ -48,7 +59,7 @@ export default function ProjectsPage({ projects = [] }) {
                         rel="noreferrer"
                         className="button-link"
                       >
-                        Repository ↗
+                        Repository
                       </a>
                     )}
                     {live && live !== "N/A" && (
@@ -58,7 +69,7 @@ export default function ProjectsPage({ projects = [] }) {
                         rel="noreferrer"
                         className="button-link secondary"
                       >
-                        Live / Demo ↗
+                        Live / Demo
                       </a>
                     )}
                   </div>

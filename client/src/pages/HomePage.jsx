@@ -35,7 +35,7 @@ export default function HomePage({
         </p>
         <div className="hero-actions">
           <button type="button" onClick={() => onNavigate && onNavigate("projects")}>
-            View Projects →
+            View Projects
           </button>
           <button
             type="button"
@@ -72,23 +72,59 @@ export default function HomePage({
             className="text-button"
             onClick={() => onNavigate && onNavigate("projects")}
           >
-            See all ({projects.length}) →
+            {"See all (" + projects.length + ") ->"}
           </button>
         </div>
         <div className="projects-grid">
-          {featuredProjects.map((project) => (
-            <article key={project.id} className="card project-card">
-              <h3>{project.name || project.title}</h3>
-              <p className="muted">{project.description}</p>
-              <div className="tag-list">
-                {project.tools?.map((tool) => (
-                  <span key={tool} className="tag-badge">
-                    {tool}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
+          {featuredProjects.map((project) => {
+            const repo = project.repository || project.repoUrl;
+            const live = project.liveDemo || project.liveUrl;
+            const isFeatured = project.featured;
+            const isCompleted = project.completed;
+
+            return (
+              <article
+                key={project.id}
+                className={`card project-card${isFeatured ? ' featured' : ''}`}
+              >
+                <div className="project-header">
+                  <h3>{project.name || project.title}</h3>
+                  <div className="project-badges">
+                    {isFeatured && (
+                      <span className="featured-badge">Featured</span>
+                    )}
+                    <span className={`status-badge ${isCompleted ? 'completed' : 'in-progress'}`}>
+                      {isCompleted ? 'Completed' : 'In Progress'}
+                    </span>
+                  </div>
+                </div>
+                <p className="project-desc">{project.description}</p>
+                <div className="tag-list">
+                  {project.tools?.map((tool) => (
+                    <span key={tool} className="tag-badge">
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+                {(repo || live) && (
+                  <footer>
+                    <div className="action-links">
+                      {repo && repo !== "N/A" && (
+                        <a href={repo} target="_blank" rel="noreferrer" className="button-link">
+                          Repository
+                        </a>
+                      )}
+                      {live && live !== "N/A" && (
+                        <a href={live} target="_blank" rel="noreferrer" className="button-link secondary">
+                          Live / Demo
+                        </a>
+                      )}
+                    </div>
+                  </footer>
+                )}
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -101,7 +137,7 @@ export default function HomePage({
             className="text-button"
             onClick={() => onNavigate && onNavigate("progress")}
           >
-            Manage tasks →
+            {"Manage tasks ->"}
           </button>
         </div>
 

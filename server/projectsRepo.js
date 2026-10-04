@@ -52,3 +52,4 @@ export async function remove(pool, id) {
   )
   return result.rowCount > 0
 }
+

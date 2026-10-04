@@ -11,10 +11,16 @@ looks exactly like what it is.
 
 At least six entries. One per real use. Every entry needs a commit link.
 
-### YYYY-MM-DD - short title
+### 2026-10-04 - Usage and guidance of AI for my project.
 
 - **Tool:**
+
+- Claude (Opus 4.6) and Gemini (3.8 Flash) were used during the development of the project.
+
 - **What I asked for:**
+
+- Provide and guide me on a step-by-step guide in developing a portfolio that integrates all of my experiences, knowledge, and projects in a website while showing a task list that shows all of my on-going tasks and goals that I need to achieve.
+
 - **What it gave back:**
 - **What I kept, what I changed, and why:**
 - **Commit:** https://github.com/YOUR-USERNAME/YOUR-REPO/commit/SHA

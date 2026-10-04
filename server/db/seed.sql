@@ -5,27 +5,37 @@ TRUNCATE TABLE tasks, projects RESTART IDENTITY CASCADE;
 
 -- Initial Learning Tasks
 INSERT INTO tasks (title, description, category, completed, created_at) VALUES
-  ('[Work in Progress] Complete Data Cleaning & EDA Course',
-   '[Template Text] Documenting core techniques in data preprocessing and exploratory analysis.',
+  ('Master SQL window functions, CTEs, and query indexing',
+   'Deep dive into PostgreSQL windowing and subqueries.',
    'SQL & Databases', true, now() - interval '14 days'),
-  ('[Work in Progress] Build Interactive BI Dashboard',
-   '[Template Text] Design executive reporting dashboards with filterable KPI widgets.',
+  ('Build customer retention cohort dashboard in Tableau',
+   'Visualize retention curves and monthly active user cohorts.',
    'Data Visualization', false, now() - interval '10 days'),
-  ('[Template Text] Master SQL Window Functions and CTEs',
-   '[Template Text] Practice complex query aggregations, partitioning, and indexing.',
-   'SQL & Databases', false, now() - interval '6 days');
+  ('Complete Exploratory Data Analysis (EDA) on retail churn dataset with Pandas',
+   'Data cleaning, missing value imputation, and correlation matrices.',
+   'Python & Pandas', false, now() - interval '6 days'),
+  ('Learn statistical hypothesis testing and A/B test analysis',
+   'Understand p-values, significance levels, and sample size calculations.',
+   'Statistics', false, now() - interval '2 days');
 
 -- Initial Portfolio Projects
 INSERT INTO projects (name, description, tools, repository, live_demo, featured, completed, created_at) VALUES
-  ('[Work in Progress] Portfolio & Analytics Tracker',
-   '[Template Text] A web platform showcasing projects and tracking ongoing technical milestones.',
-   ARRAY['React', 'CSS', 'Vite', 'JavaScript', 'PostgreSQL'],
-   'https://github.com/Bagziel/Progress-Portfolio-APSI',
-   'https://Bagziel.github.io/Progress-Portfolio-APSI',
-   true, false, now() - interval '20 days'),
-  ('[Template Text] Exploratory Customer Analysis Model',
-   '[Template Text] Detailed case study on consumer retention and cohort segmentation.',
-   ARRAY['Python', 'Pandas', 'PostgreSQL'],
+  ('E-Commerce Customer Segmentation & Cohort Analysis',
+   'Analyzed over 50,000 transaction records using Python and Pandas to identify retention patterns and customer lifetime value cohorts.',
+   ARRAY['Python', 'Pandas', 'PostgreSQL', 'Matplotlib'],
    'https://github.com/Bagziel/Progress-Portfolio-APSI',
    'https://github.com/Bagziel',
-   true, false, now() - interval '12 days');
+   true, true, now() - interval '20 days'),
+  ('Clinic Appointment No-Show Analytics Dashboard',
+   'Exploratory analysis and data cleaning of patient attendance logs to uncover patterns behind appointment no-shows, visualized in an interactive dashboard.',
+   ARRAY['SQL', 'Tableau', 'Excel'],
+   'https://github.com/Bagziel/Progress-Portfolio-APSI',
+   'https://github.com/Bagziel',
+   true, false, now() - interval '12 days'),
+  ('Real-Time Weather & Air Quality ETL Pipeline',
+   'Constructed an automated data collection pipeline fetching open air quality API metrics and staging them in PostgreSQL for time-series forecasting.',
+   ARRAY['Python', 'REST API', 'PostgreSQL'],
+   'https://github.com/Bagziel/Progress-Portfolio-APSI',
+   'https://github.com/Bagziel',
+   false, false, now() - interval '5 days');
+

@@ -29,3 +29,4 @@ CREATE TABLE IF NOT EXISTS projects (
 
 CREATE INDEX IF NOT EXISTS projects_created_at_idx
   ON projects (created_at DESC);
+
