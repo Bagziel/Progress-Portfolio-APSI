@@ -1,10 +1,14 @@
 import express from 'express'
 import cors from 'cors'
+import helmet from 'helmet'
 import { pool } from './db/pool.js'
 import * as tasks from './tasksRepo.js'
 import * as projects from './projectsRepo.js'
 
 const app = express()
+
+// Security headers
+app.use(helmet())
 
 // CORS configuration
 const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:5173')

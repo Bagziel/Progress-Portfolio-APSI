@@ -7,37 +7,48 @@
 :root {
   color-scheme: dark;
   
-  /* Core Surface & Text */
-  --bg: #090d12;
-  --card: #101722;
-  --card-elevated: #151e2c;
-  --fg: #f3f6fa;
-  --muted: #8c9cb0;
+  /* User-Defined Design System Color Tokens */
+  --color-primary: #397234;
+  --color-accent: #3F2617;
+  --color-bg: #0B0F08;
+  --color-surface: #283F23;
+  --color-text: #B78449;
+
+  /* Harmonized Semantic System Variables - High Contrast & Crisp Legibility */
+  --bg: var(--color-bg);                  /* #0B0F08 Canvas */
+  --card: var(--color-surface);           /* #283F23 Surface */
+  --card-elevated: #33502c;               /* Slightly brighter surface for clear card distinction */
   
-  /* Borders & Dividers */
-  --line: #1c2738;
-  --line-hover: #293a52;
+  /* Typography - Pure bright contrast */
+  --fg: #FFFFFF;                          /* Pure crisp white for headings and primary body text */
+  --fg-soft: #F5EFEB;                     /* High-contrast warm ivory (WCAG AAA > 14:1) */
+  --text-accent: #D8A56B;                 /* Brightened, readable golden amber (enhanced from #B78449) */
+  --muted: #D1DECE;                       /* Brightened sage for sharp, un-muddled secondary text (WCAG AAA) */
   
-  /* Accents & Brand (Emerald to Cyan Data Palette) */
-  --accent: #10b981;
-  --accent-secondary: #06b6d4;
-  --accent-gradient: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
-  --accent-glow: rgba(16, 185, 129, 0.22);
-  --accent-fg: #032019;
+  /* Borders & Dividers - Sharp and crisp without muddiness */
+  --line: rgba(183, 132, 73, 0.40);       /* Clean defined gold border */
+  --line-hover: rgba(216, 165, 107, 0.75);
+  
+  /* Accents & Brand */
+  --accent: #489241;                      /* Luminous leaf green (brightened from #397234 for high punch) */
+  --accent-secondary: var(--text-accent);
+  --accent-gradient: linear-gradient(135deg, #489241 0%, #D8A56B 100%);
+  --accent-glow: rgba(72, 146, 65, 0.40);
+  --accent-fg: #FFFFFF;
   
   /* Status & Alerts */
-  --warn-bg: #1e1809;
-  --warn-line: #6b4d10;
-  --warn-fg: #fde047;
+  --warn-bg: #2B1D12;
+  --warn-line: #B78449;
+  --warn-fg: #FEE4C3;
   
-  --error-bg: #240e13;
-  --error-line: #6e1c25;
-  --error-fg: #fca5a5;
+  --error-bg: #331317;
+  --error-line: #A8323E;
+  --error-fg: #FED7D7;
   
-  /* Tag & Badge Tokens */
-  --tag-bg: #141f2d;
-  --tag-line: #22344c;
-  --tag-fg: #5eead4;
+  /* Tag & Badge Tokens - Solid, distinct, non-translucent */
+  --tag-bg: #142211;                      /* Solid dark forest container */
+  --tag-line: #B78449;                    /* Sharp gold contour */
+  --tag-fg: #F3CA98;                      /* Radiant legible gold text */
 }
 
 /* Global Reset & Base */
@@ -137,7 +148,7 @@ h3 {
   top: 0;
   z-index: 50;
   border-bottom: 1px solid var(--line);
-  background: rgba(16, 23, 34, 0.85);
+  background: rgba(40, 63, 35, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -412,14 +423,15 @@ button:disabled {
 
 /* ---- Featured Project Highlight ---- */
 .project-card.featured {
-  border-left-color: var(--accent);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.07);
+  border-left-color: var(--text-accent);
+  border-left-width: 4px;
+  background: linear-gradient(135deg, rgba(183, 132, 73, 0.12) 0%, var(--card) 75%);
+  box-shadow: 0 0 20px rgba(183, 132, 73, 0.15);
 }
 
 .project-card.featured:hover {
-  border-left-color: var(--accent);
-  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.15);
+  border-left-color: var(--text-accent);
+  box-shadow: 0 8px 30px rgba(183, 132, 73, 0.25);
 }
 
 .project-header {
@@ -688,17 +700,17 @@ input[type="checkbox"]:checked::before {
 
 .completed-text {
   text-decoration: line-through;
-  color: var(--muted);
-  opacity: 0.75;
+  color: #B2C4AF;
+  font-weight: 450;
 }
 
 .category-pill {
-  font-size: 0.75rem;
-  font-weight: 550;
+  font-size: 0.78rem;
+  font-weight: 600;
   background: var(--tag-bg);
   border: 1px solid var(--tag-line);
   color: var(--tag-fg);
-  padding: 0.2rem 0.6rem;
+  padding: 0.25rem 0.65rem;
   border-radius: 9999px;
   white-space: nowrap;
 }
