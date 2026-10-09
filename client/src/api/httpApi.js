@@ -3,7 +3,7 @@
 // This is the file that matters for your finals project. mockApi.js exists so
 // you can build the interface before this has anywhere to point.
 
-const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
+const API_BASE = `${import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api`
 const TASKS_BASE = `${API_BASE}/tasks`
 const PROJECTS_BASE = `${API_BASE}/projects`
 
@@ -24,14 +24,15 @@ export async function listTasks() {
   return handleResponse(response)
 }
 
-export async function createTask(title) {
+export async function createTask(input) {
+  const payload = typeof input === 'string' ? { title: input } : input
   const response = await fetch(`${TASKS_BASE}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title })
+    body: JSON.stringify(payload)
   })
   return handleResponse(response)
-  }
+}
 
 export async function updateTask(id, updates) {
   const response = await fetch(`${TASKS_BASE}/${id}`, {
