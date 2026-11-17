@@ -15,8 +15,8 @@ This document satisfies the 5-point Security and Privacy requirement for the fin
 | `NODE_ENV=production` & no stack traces | **Yes** | Centralized error handler in `server.js` logs errors internally and returns `{ error: 'Internal server error' }`. |
 | HTTP security headers (`helmet`) installed | **Yes** | `helmet` package installed and initialized via `app.use(helmet())` in `server/server.js`. |
 | Connection / rate protection | **Yes** | `server/db/pool.js` caps maximum concurrent PostgreSQL connections to 5 to avoid resource exhaustion. |
-| Password hashing / authentication | **N/A** | No custom credentials stored; authentication is handled via Cloudflare Zero Trust One-Time PIN. |
-| Access Door / Ownership check | **Yes** | Protected via Cloudflare Zero Trust (Option A) restricted to `ebbags05@gmail.com` and `tjakoen.s@gmail.com`. |
+| Password hashing / authentication | **N/A** | No custom credentials stored; authentication uses HTTP Basic Auth with credentials stored exclusively in hosting environment variables. |
+| Access Door / Ownership check | **Yes** | Protected via **HTTP Basic Authentication (Option B)** middleware in `server/server.js`. Credentials (`BASIC_AUTH_USER` and `BASIC_AUTH_PASS`) are set as environment variables on the hosting provider — never committed to source. |
 | Dependency vulnerabilities audited | **Yes** | `npm audit` executed across dependencies. |
 | No real classmate data / photos | **Yes** | Zero classmate names, student IDs, or images used in repository, seed data, or demo assets. |
 | Invented / synthetic seed data | **Yes** | `server/db/seed.sql` contains synthetic data science project milestones and case studies. |

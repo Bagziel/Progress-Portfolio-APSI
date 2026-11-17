@@ -7,7 +7,36 @@ const API_BASE = `${import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_AP
 const TASKS_BASE = `${API_BASE}/tasks`
 const PROJECTS_BASE = `${API_BASE}/projects`
 
-async function handleResponse(response) {
+let cachedAuthToken = null
+try {
+  cachedAuthToken = sessionStorage.getItem('portfolio_basic_auth')
+} catch {}
+
+function getHeaders(extraHeaders = {}) {
+  const headers = { ...extraHeaders }
+  if (cachedAuthToken) {
+    headers['Authorization'] = `Basic ${cachedAuthToken}`
+  }
+  return headers
+}
+
+async function handleResponse(response, retryFn) {
+  if (response.status === 401) {
+    const creds = window.prompt(
+      'Access Door (Option B): This portfolio API is protected.\nEnter credentials (username:password):'
+    )
+    if (creds && creds.includes(':')) {
+      const token = btoa(creds.trim())
+      cachedAuthToken = token
+      try {
+        sessionStorage.setItem('portfolio_basic_auth', token)
+      } catch {}
+      if (typeof retryFn === 'function') {
+        return retryFn()
+      }
+    }
+    throw new Error('Authentication required (Option B: HTTP Basic Auth)')
+  }
   if (response.status === 404) throw new Error('Not found')
   if (!response.ok) {
     const body = await response.json().catch(() => ({}))
@@ -20,44 +49,51 @@ async function handleResponse(response) {
 // Tasks
 
 export async function listTasks() {
-  const response = await fetch(TASKS_BASE)
-  return handleResponse(response)
+  const response = await fetch(TASKS_BASE, {
+    headers: getHeaders()
+  })
+  return handleResponse(response, () => listTasks())
 }
 
 export async function createTask(input) {
   const payload = typeof input === 'string' ? { title: input } : input
   const response = await fetch(`${TASKS_BASE}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify(payload)
   })
-  return handleResponse(response)
+  return handleResponse(response, () => createTask(input))
 }
 
 export async function updateTask(id, updates) {
   const response = await fetch(`${TASKS_BASE}/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify(updates)
   })
-  return handleResponse(response)
+  return handleResponse(response, () => updateTask(id, updates))
 }
 
 export async function deleteTask(id) {
   const response = await fetch(`${TASKS_BASE}/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: getHeaders()
   })
-  return handleResponse(response)
+  return handleResponse(response, () => deleteTask(id))
 }
 
 // Projects
 
 export async function listProjects() {
-  const response = await fetch(PROJECTS_BASE)
-  return handleResponse(response)
+  const response = await fetch(PROJECTS_BASE, {
+    headers: getHeaders()
+  })
+  return handleResponse(response, () => listProjects())
 }
 
 export async function getProject(id) {
-  const response = await fetch(`${PROJECTS_BASE}/${id}`)
-  return handleResponse(response)
+  const response = await fetch(`${PROJECTS_BASE}/${id}`, {
+    headers: getHeaders()
+  })
+  return handleResponse(response, () => getProject(id))
 }
