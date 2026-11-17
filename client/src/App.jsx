@@ -1,38 +1,79 @@
-import { useEffect, useState } from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import HomePage from "./pages/HomePage";
-import ProjectsPage from "./pages/ProjectsPage";
-import ProgressPage from "./pages/ProgressPage";
-import { listTasks, listProjects, createTask, updateTask, deleteTask } from "./api";
-import DemoNotice from "./components/DemoNotice.jsx";
+import { useEffect, useState } from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import FloatingHud from './components/FloatingHud';
+import TerminalModal from './components/TerminalModal';
+import HomePage from './pages/HomePage';
+import ProjectsPage from './pages/ProjectsPage';
+import ProgressPage from './pages/ProgressPage';
+import DemoNotice from './components/DemoNotice';
+import { listTasks, listProjects, createTask, updateTask, deleteTask } from './api';
 
 export default function App() {
-  // Application State
+  // Application Data State
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage, setCurrentPage] = useState('home');
+
+  // UI Theme & Terminal State
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    try {
+      return localStorage.getItem('portfolio_theme') || 'obsidian';
+    } catch {
+      return 'obsidian';
+    }
+  });
+
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+
+  // Synchronize theme on document element
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    try {
+      localStorage.setItem('portfolio_theme', currentTheme);
+    } catch {}
+  }, [currentTheme]);
 
   // Zero-dependency Hash Navigation (#home, #projects, #progress)
   useEffect(() => {
     function handleHash() {
-      const hash = window.location.hash.replace("#/", "").replace("#", "");
-      if (["projects", "progress"].includes(hash)) {
+      const hash = window.location.hash.replace('#/', '').replace('#', '');
+      if (['projects', 'progress'].includes(hash)) {
         setCurrentPage(hash);
       } else {
-        setCurrentPage("home");
+        setCurrentPage('home');
       }
     }
     handleHash();
-    window.addEventListener("hashchange", handleHash);
-    return () => window.removeEventListener("hashchange", handleHash);
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
+
+  // Global Keyboard Shortcuts (e.g. ~ to toggle Terminal)
+  useEffect(() => {
+    function handleGlobalKeyDown(e) {
+      if (e.key === '`' || e.key === '~') {
+        const tag = document.activeElement?.tagName?.toLowerCase();
+        if (tag !== 'input' && tag !== 'textarea') {
+          e.preventDefault();
+          setIsTerminalOpen((prev) => !prev);
+        }
+      }
+    }
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, []);
 
   function handleNavigate(page) {
     setCurrentPage(page);
     window.location.hash = `#${page}`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleThemeChange(themeId) {
+    setCurrentTheme(themeId);
   }
 
   // Fetch initial tasks and projects
@@ -61,6 +102,7 @@ export default function App() {
   async function handleAddTask(input) {
     const created = await createTask(input);
     setTasks((prevTasks) => [created, ...prevTasks]);
+    return created;
   }
 
   async function handleToggleTask(id) {
@@ -78,21 +120,39 @@ export default function App() {
   }
 
   return (
-    <div className="app-layout">
-      <Header currentPage={currentPage} onNavigate={handleNavigate} />
+    <div className={`app-layout theme-${currentTheme}`}>
+      {/* Background ambient mesh grid */}
+      <div className="ambient-background-grid" aria-hidden="true" />
+
+      {/* Header Bar */}
+      <Header
+        currentPage={currentPage}
+        onNavigate={handleNavigate}
+        currentTheme={currentTheme}
+        onThemeChange={handleThemeChange}
+        onOpenTerminal={() => setIsTerminalOpen(true)}
+      />
+
+      {/* Main Content Area */}
       <main className="main-content">
         <div className="page-wrapper">
           <DemoNotice />
+
           {loadError && (
-            <div className="error" role="alert">
-              Couldn&apos;t load data: {loadError}
+            <div className="error-alert-banner" role="alert">
+              <span className="error-icon">⚠️</span>
+              <span>Could not load portfolio data: {loadError}</span>
             </div>
           )}
+
           {isLoading ? (
-            <p className="loading-state">Loading portfolio data...</p>
+            <div className="loading-state-card">
+              <div className="loading-pulse-ring" />
+              <p className="loading-state-text">INITIALIZING TELEMETRY &amp; DATA SYSTEMS...</p>
+            </div>
           ) : (
             <>
-              {currentPage === "home" && (
+              {currentPage === 'home' && (
                 <HomePage
                   projects={projects}
                   tasks={tasks}
@@ -100,12 +160,13 @@ export default function App() {
                   onToggleTask={handleToggleTask}
                   onDeleteTask={handleDeleteTask}
                   onNavigate={handleNavigate}
+                  onOpenTerminal={() => setIsTerminalOpen(true)}
                 />
               )}
-              {currentPage === "projects" && (
+              {currentPage === 'projects' && (
                 <ProjectsPage projects={projects} />
               )}
-              {currentPage === "progress" && (
+              {currentPage === 'progress' && (
                 <ProgressPage
                   tasks={tasks}
                   onAddTask={handleAddTask}
@@ -117,7 +178,23 @@ export default function App() {
           )}
         </div>
       </main>
-      <Footer />
+
+      {/* Footer */}
+      <Footer onOpenTerminal={() => setIsTerminalOpen(true)} />
+
+      {/* Floating HUD Dock (Terminal Launcher & Back to Top) */}
+      <FloatingHud onOpenTerminal={() => setIsTerminalOpen(true)} />
+
+      {/* Interactive Floating Terminal Modal */}
+      <TerminalModal
+        isOpen={isTerminalOpen}
+        onClose={() => setIsTerminalOpen(false)}
+        projects={projects}
+        tasks={tasks}
+        onAddTask={handleAddTask}
+        currentTheme={currentTheme}
+        onThemeChange={handleThemeChange}
+      />
     </div>
   );
 }
