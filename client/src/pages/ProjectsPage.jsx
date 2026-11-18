@@ -24,9 +24,9 @@ export default function ProjectsPage({ projects = [] }) {
     <div className="page-content projects-view">
       <div className="page-header-block">
         <div className="header-eyebrow">// REPOSITORY ARCHIVE [SECTOR 02]</div>
-        <h1 className="page-main-title">Projects &amp; Case Studies</h1>
+        <h1 className="page-main-title">Projects</h1>
         <p className="page-lead-desc">
-          Documenting end-to-end full stack platforms, database modeling, ETL pipelines, and interactive analytics reporting.
+          Documenting on-device AI/ML systems, mobile applications, responsive web platforms, and full-stack software engineering projects.
         </p>
 
         {/* Filter Chips Bar */}
@@ -89,7 +89,18 @@ export default function ProjectsPage({ projects = [] }) {
                 </div>
 
                 <h2 className="project-title">{project.name || project.title}</h2>
+                {project.subtitle && (
+                  <div className="project-subtitle">{project.subtitle}</div>
+                )}
                 <p className="project-description">{project.description}</p>
+
+                {Array.isArray(project.highlights) && project.highlights.length > 0 && (
+                  <ul className="project-highlights">
+                    {project.highlights.map((highlight, idx) => (
+                      <li key={idx}>{highlight}</li>
+                    ))}
+                  </ul>
+                )}
 
                 {tools.length > 0 && (
                   <div className="project-tools-wrap">

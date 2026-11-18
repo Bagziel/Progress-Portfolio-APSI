@@ -17,10 +17,10 @@ export default function Header({
   ];
 
   const themes = [
-    { id: 'obsidian', name: 'Cyber Obsidian', icon: '🟢' },
-    { id: 'gold', name: 'Champagne Gold', icon: '✨' },
-    { id: 'crt', name: 'Retro Amber CRT', icon: '⚡' },
-    { id: 'slate', name: 'Modern Slate', icon: '⚪' },
+    { id: 'obsidian', name: 'Cyber Obsidian'},
+    { id: 'gold', name: 'Champagne Gold'},
+    { id: 'crt', name: 'Retro Amber CRT'},
+    { id: 'slate', name: 'Modern Slate'},
   ];
 
   // Close theme dropdown when clicking outside
@@ -114,9 +114,6 @@ export default function Header({
               aria-expanded={isThemeMenuOpen}
               aria-haspopup="true"
             >
-              <span className="theme-current-icon">
-                {themes.find((t) => t.id === currentTheme)?.icon || '🎨'}
-              </span>
               <span className="action-label">Theme</span>
               <span className={`dropdown-chevron ${isThemeMenuOpen ? 'open' : ''}`}>▾</span>
             </button>

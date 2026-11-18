@@ -3,7 +3,7 @@
     {
       "id": 1,
       "title": "[Work in Progress] Complete Data Cleaning & EDA Course",
-      "description": "[Template Text] Documenting core techniques in data preprocessing and exploratory analysis.",
+      "description": "Documenting core techniques in data preprocessing and exploratory analysis.",
       "category": "SQL & Databases",
       "completed": false,
       "createdAt": "2026-09-01T10:00:00.000Z"
@@ -11,15 +11,15 @@
     {
       "id": 2,
       "title": "[Work in Progress] Build Interactive BI Dashboard",
-      "description": "[Template Text] Design executive reporting dashboards with filterable KPI widgets.",
+      "description": "Design executive reporting dashboards with filterable KPI widgets.",
       "category": "Data Visualization",
       "completed": false,
       "createdAt": "2026-09-10T14:00:00.000Z"
     },
     {
       "id": 3,
-      "title": "[Template Text] Master SQL Window Functions and CTEs",
-      "description": "[Template Text] Practice complex query aggregations, partitioning, and indexing.",
+      "title": "Master SQL Window Functions and CTEs",
+      "description": "Practice complex query aggregations, partitioning, and indexing.",
       "category": "SQL & Databases",
       "completed": true,
       "createdAt": "2026-09-15T09:00:00.000Z"
@@ -28,23 +28,67 @@
   "projects": [
     {
       "id": 1,
-      "name": "[Work in Progress] Portfolio & Analytics Tracker",
-      "description": "[Template Text] A web platform showcasing projects and tracking ongoing technical milestones.",
-      "tools": ["React", "CSS", "Vite", "JavaScript", "PostgreSQL"],
-      "repository": "https://github.com/Bagziel/Progress-Portfolio-APSI",
-      "liveDemo": "https://Bagziel.github.io/Progress-Portfolio-APSI",
+      "name": "Hands Free",
+      "subtitle": "Offline Voice-Control Android Overlay | Thesis Project (2026)",
+      "description": "An offline speech-recognition and voice-control accessibility overlay for Android utilizing an on-device fine-tuned Whisper-tiny model deployed through ONNX Runtime.",
+      "highlights": [
+        "Performed QA testing on most app features and reported results from a 15-participant usability study (450 task attempts), including a System Usability Scale (SUS) score of 76.0.",
+        "Analyzed word error rate (WER) against task success rate across three failure modes, documenting the end-to-end CRISP-DM methodology for a fine-tuned Whisper-tiny model deployed offline via ONNX Runtime.",
+        "Organized survey responses, WER results, and task attempts into a Results table, authoring the Results, Discussion, Conclusion, and Recommendations sections of the ACM-format manuscript."
+      ],
+      "tools": ["Android", "ONNX Runtime", "Whisper-tiny", "Python", "CRISP-DM", "PyTorch"],
+      "repository": "https://github.com/JCDC0/HandsFree",
+      "liveDemo": "https://github.com/JCDC0/HandsFree",
       "featured": true,
-      "completed": false
+      "completed": true
     },
     {
       "id": 2,
-      "name": "[Template Text] Exploratory Customer Analysis Model",
-      "description": "[Template Text] Detailed case study on consumer retention and cohort segmentation.",
-      "tools": ["Python", "Pandas", "PostgreSQL"],
-      "repository": "https://github.com/Bagziel/Progress-Portfolio-APSI",
-      "liveDemo": "https://github.com/Bagziel",
+      "name": "Procrastimate",
+      "subtitle": "Task Manager App | Flutter Group Project (2025)",
+      "description": "A gamified task management and productivity mobile application built with Flutter, focused on improving time management and helping users organize tasks to avoid procrastination.",
+      "highlights": [
+        "Assisted in the UI/UX design of a task manager app built with Flutter, focused on improving time management and helping users organize tasks to avoid procrastination.",
+        "Designed the app around time management and task organization to help users keep daily priorities clear and avoid procrastination.",
+        "Supported the design of gamified features, such as points and streaks, to encourage users to complete tasks consistently."
+      ],
+      "tools": ["Flutter", "Dart", "Firebase", "Firestore", "Android", "UI/UX"],
+      "repository": "https://github.com/Haruuowo/procastimate_app",
+      "liveDemo": "https://github.com/Haruuowo/procastimate_app",
       "featured": true,
-      "completed": false
+      "completed": true
+    },
+    {
+      "id": 3,
+      "name": "Frequency",
+      "subtitle": "Music Platform Website | WEBCS Project (2024)",
+      "description": "A web-based music platform that helps users discover music genres through a structured and clean front-end interface with responsive layouts across diverse screen sizes.",
+      "highlights": [
+        "Developed a web-based music platform that helped users discover music genres.",
+        "Built the front-end structure using HTML5 and CSS3, with a focus on a clear, organized, and accessible layout.",
+        "Applied responsive design so the site worked across different screen sizes, creating a user-friendly experience."
+      ],
+      "tools": ["HTML5", "CSS3", "JavaScript", "Responsive Design"],
+      "repository": "https://github.com/Bagziel/WEBCS_proj",
+      "liveDemo": "https://Bagziel.github.io/WEBCS_proj",
+      "featured": true,
+      "completed": true
+    },
+    {
+      "id": 4,
+      "name": "Progress Portfolio & Milestone Tracker",
+      "subtitle": "Full-Stack Portfolio & Telemetry Dashboard | APSI Project (2026)",
+      "description": "A modern Cyber-Obsidian & Editorial Bento HUD personal portfolio documenting software development milestones, project deliverables, and technical skills.",
+      "highlights": [
+        "Engineered dual-mode architecture: resilient zero-dependency browser simulation for GitHub Pages and Express/PostgreSQL API.",
+        "Architected responsive Bento grid interface featuring live telemetry, filtering, and 4 high-contrast themes (Obsidian, Gold, CRT Amber, Slate).",
+        "Integrated interactive diagnostic HUD and CLI terminal modal (~ key) for keyboard-driven system navigation."
+      ],
+      "tools": ["React", "JavaScript", "Vite", "CSS3", "PostgreSQL", "Express"],
+      "repository": "https://github.com/Bagziel/Progress-Portfolio-APSI",
+      "liveDemo": "https://Bagziel.github.io/Progress-Portfolio-APSI",
+      "featured": true,
+      "completed": true
     }
   ]
 }

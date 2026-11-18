@@ -1077,15 +1077,41 @@ button, input, select, textarea {
 .project-title {
   font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.project-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--accent);
+  margin-bottom: 12px;
+  letter-spacing: 0.02em;
 }
 
 .project-description {
-  color: var(--fg-muted);
-  font-size: 0.9rem;
+  color: var(--fg);
+  font-size: 0.92rem;
   line-height: 1.55;
-  margin-bottom: 16px;
-  flex: 1;
+  margin-bottom: 14px;
+}
+
+.project-highlights {
+  margin: 0 0 16px 18px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style-type: disc;
+}
+
+.project-highlights li {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+.project-highlights li::marker {
+  color: var(--accent-secondary);
 }
 
 .project-tools-wrap {

@@ -23,7 +23,24 @@ function read(key, defaultValue) {
   const stored = localStorage.getItem(key)
   if (stored) {
     try {
-      return JSON.parse(stored)
+      const parsed = JSON.parse(stored)
+      // If cached data contains outdated template text or old repository, refresh with seed
+      const isOutdated =
+        Array.isArray(parsed) &&
+        (parsed.some(
+          (item) =>
+            (item.name && item.name.includes('[Template Text]')) ||
+            (item.title && item.title.includes('[Template Text]')) ||
+            (item.description && item.description.includes('[Template Text]'))
+        ) ||
+        parsed.some(
+          (item) =>
+            item.name === 'Hands Free' &&
+            item.repository !== 'https://github.com/JCDC0/HandsFree'
+        ))
+      if (!isOutdated) {
+        return parsed
+      }
     } catch {
       localStorage.removeItem(key)
     }

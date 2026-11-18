@@ -286,6 +286,9 @@ export default function HomePage({
                 </div>
 
                 <h3 className="project-title">{project.name || project.title}</h3>
+                {project.subtitle && (
+                  <div className="project-subtitle">{project.subtitle}</div>
+                )}
                 <p className="project-description">{project.description}</p>
 
                 <div className="project-tools-wrap">
